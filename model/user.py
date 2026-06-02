@@ -1,8 +1,5 @@
 from datetime import date
-from typing import List
-
-from pydantic import BaseModel, Field
-
+from pydantic import BaseModel
 
 class User(BaseModel):
     user_id: int

@@ -7,6 +7,7 @@ CREATE TABLE customer (
     first_name varchar(300) NOT NULL DEFAULT '',
     last_name varchar(300) NOT NULL DEFAULT '',
     email varchar(300) NOT NULL DEFAULT '',
+    status varchar(300) NOT NULL DEFAULT '',
     PRIMARY KEY (id)
 );
 
@@ -14,7 +15,7 @@ CREATE TABLE customer_order (
     id int(11) NOT NULL AUTO_INCREMENT,
     customer_id int(11) NOT NULL,
     item_name varchar(300) NOT NULL DEFAULT '',
-    price int(11) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (customer_id) REFERENCES customer(id)
 );
@@ -26,4 +27,3 @@ CREATE TABLE student (
     email varchar(300) NOT NULL DEFAULT '',
     PRIMARY KEY (id)
 );
-
