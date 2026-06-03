@@ -51,3 +51,4 @@ async def get_by_customer_id(customer_id: int):
     query = f"SELECT * FROM {TABLE_NAME} WHERE customer_id=:customer_id"
     rows = await database.fetch_all(query, values={"customer_id": customer_id})
     return [CustomerOrder.model_validate(dict(row)) for row in rows]
+    # return [CustomerOrder(**dict(row)) for row in rows]

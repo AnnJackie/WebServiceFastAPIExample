@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS customer_favorite_item;
 DROP TABLE IF EXISTS customer_order;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS student;
@@ -16,6 +17,14 @@ CREATE TABLE customer_order (
     customer_id int(11) NOT NULL,
     item_name varchar(300) NOT NULL DEFAULT '',
     price DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (customer_id) REFERENCES customer(id)
+);
+
+CREATE TABLE customer_favorite_item (
+    id int(11) NOT NULL AUTO_INCREMENT,
+    customer_id int(11) NOT NULL,
+    item_id int(11) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (customer_id) REFERENCES customer(id)
 );
