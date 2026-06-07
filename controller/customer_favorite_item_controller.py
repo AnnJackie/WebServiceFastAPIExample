@@ -19,5 +19,4 @@ async def get_favorite_item(favorite_item_id: int) -> CustomerFavoriteItemRespon
 
 @router.post("/")
 async def create_favorite_item(favorite_item: CustomerFavoriteItemRequest):
-    print(favorite_item)
     return await customer_favorite_item_service.create_favorite_item(favorite_item)
