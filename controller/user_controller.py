@@ -1,37 +1,25 @@
-from typing import List, Optional
-from fastapi import APIRouter, HTTPException, Query
-from model.user import User
+from fastapi import APIRouter, Depends, Path
+from starlette import status
+from model.exception import token_exception
+from model.user_request import UserRequest
+from model.user_response import UserResponse
+from service import auth_service, user_service
 
-router = APIRouter(prefix="/user", tags=["user"])
-users = {}
+router = APIRouter(
+    prefix="/user",
+    tags=["user"],
+    responses={401: {"user": "Not authorized"}},
+)
 
-@router.get("/{user_id}", response_model=User)
-async def get_user(user_id: int):
-    user = users.get(user_id)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
+@router.post("/", status_code=status.HTTP_201_CREATED)
+async def create_user(user_request: UserRequest):
+    await user_service.create_user(user_request)
 
-@router.post("/", response_model=User)
-async def create_user(user: User):
-    if user.user_id in users:
-        raise HTTPException(status_code=400, detail="User ID already exists")
-    users[user.user_id] = user
-    return user
-
-@router.put("/{user_id}", response_model=User)
-async def update_user(user_id: int, updated_user: User):
-    if user_id not in users:
-        raise HTTPException(status_code=404, detail="User not found")
-    users[user_id] = updated_user
-    return updated_user
-
-@router.delete("/{user_id}", response_model=User)
-async def delete_user(user_id: int):
-    if user_id not in users:
-        raise HTTPException(status_code=404, detail="User not found")
-    return users.pop(user_id)
-
-@router.get("/", response_model=List[User])
-async def get_user_above_age(age: Optional[int] = Query(0)) -> List[User]:
-    return [user for user in users.values() if user.age >= age]
+@router.get("/{user_id}", status_code=status.HTTP_200_OK)
+async def get_user_by_id(
+    user: UserResponse = Depends(auth_service.validate_user),
+    user_id: int = Path(gt=0),
+):
+    if user is None:
+        raise token_exception()
+    return await user_service.get_by_id(user_id)

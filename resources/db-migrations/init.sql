@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS customer_favorite_item;
 DROP TABLE IF EXISTS customer_order;
 DROP TABLE IF EXISTS customer;
 DROP TABLE IF EXISTS student;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE customer (
     id int(11) NOT NULL AUTO_INCREMENT,
@@ -35,4 +36,13 @@ CREATE TABLE student (
     last_name varchar(300) NOT NULL DEFAULT '',
     email varchar(300) NOT NULL DEFAULT '',
     PRIMARY KEY (id)
+);
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) UNIQUE,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    hashed_password VARCHAR(255),
+    is_active BOOLEAN DEFAULT TRUE
 );

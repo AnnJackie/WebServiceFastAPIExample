@@ -12,4 +12,7 @@ class Config(BaseSettings):
     REDIS_TTL: int = 100
     TV_MAZE_API_BASE_URL: str = "https://api.tvmaze.com"
     SELLER_SERVICE_BASE_URL: str = "http://localhost:8081"
+    SECRET_KEY: str = "your-secret-key"
+    ALGORITHM: str = "HS256"
+    TOKEN_EXPIRY_TIME: int = 30
     

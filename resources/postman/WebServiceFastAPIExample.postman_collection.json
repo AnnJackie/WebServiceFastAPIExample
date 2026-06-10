@@ -1,0 +1,180 @@
+{
+  "info": {
+    "name": "WebServiceFastAPIExample",
+    "description": "Test collection for the FastAPI e-commerce example project.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" },
+    { "key": "token", "value": "" },
+    { "key": "customerId", "value": "1" },
+    { "key": "userId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "1 - Auth",
+      "item": [
+        {
+          "name": "Register user",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"student1\",\n  \"first_name\": \"Test\",\n  \"last_name\": \"User\",\n  \"password\": \"12qwaszx\"\n}"
+            },
+            "url": "{{baseUrl}}/user/"
+          }
+        },
+        {
+          "name": "Login (get token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  pm.collectionVariables.set('token', json.jwt_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                { "key": "username", "value": "student1" },
+                { "key": "password", "value": "12qwaszx" }
+              ]
+            },
+            "url": "{{baseUrl}}/auth/token"
+          }
+        },
+        {
+          "name": "Get user by id (protected)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/user/{{userId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 - Customer",
+      "item": [
+        {
+          "name": "Create customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Alon\",\n  \"last_name\": \"Shaked\",\n  \"email\": \"alon@gmail.com\",\n  \"status\": \"REGULAR\"\n}"
+            },
+            "url": "{{baseUrl}}/customer/"
+          }
+        },
+        {
+          "name": "Get all customers",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/customer/"
+          }
+        },
+        {
+          "name": "Get customer by id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/customer/{{customerId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3 - Customer Order",
+      "item": [
+        {
+          "name": "Create customer order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer\": {\n    \"first_name\": \"Alon\",\n    \"last_name\": \"Shaked\",\n    \"email\": \"alon@gmail.com\",\n    \"status\": \"REGULAR\"\n  },\n  \"customer_order\": {\n    \"item_name\": \"Laptop\",\n    \"price\": 1699.99\n  }\n}"
+            },
+            "url": "{{baseUrl}}/customer_order/"
+          }
+        },
+        {
+          "name": "Get customer order by id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/customer_order/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 - Student",
+      "item": [
+        {
+          "name": "Create student",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Doe\",\n  \"email\": \"jane@example.com\"\n}"
+            },
+            "url": "{{baseUrl}}/student/"
+          }
+        },
+        {
+          "name": "Get all students",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/student/"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5 - TV Maze",
+      "item": [
+        {
+          "name": "Get show by id",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/tv_maze/show/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6 - Redis",
+      "item": [
+        {
+          "name": "Redis test",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/redis/test?redis_key=test_key&redis_value=hello",
+              "host": ["{{baseUrl}}"],
+              "path": ["redis", "test"],
+              "query": [
+                { "key": "redis_key", "value": "test_key" },
+                { "key": "redis_value", "value": "hello" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
