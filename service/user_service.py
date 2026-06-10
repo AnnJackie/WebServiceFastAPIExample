@@ -41,7 +41,6 @@ async def get_by_id(user_id: int) -> Optional[UserResponse]:
 
 async def create_user(user_request: UserRequest):
     if await validate_unique_username(user_request.username):
-        print("password: ", user_request.password)
         hashed_password = get_password_hash(user_request.password)
         await user_repository.create_user(user_request, hashed_password)
     else:
